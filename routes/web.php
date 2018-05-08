@@ -11,6 +11,11 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'PagesController@staff_index');
+//Route::get('/staff', 'PagesController@staff_index');
+//Route::get('/course', 'PagesController@course_index');
+//Route::get('/student', 'PagesController@student_index');
+
+Route::resource('staff', 'StaffsController');
+Route::resource('course', 'CoursesController');
+Route::resource('student', 'StudentsController');
