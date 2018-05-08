@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Staff;
 use App\Course;
-//use DB;
+use DB;
 class StaffsController extends Controller
 {
     /**
@@ -63,7 +63,9 @@ class StaffsController extends Controller
     {
         $staff = Staff::find($id);
         //$courses = Course::find($id);
-        return view('staffs.show')->with('staff', $staff);
+        $courses = DB::select(DB::raw("SELECT * FROM Courses WHERE Courses.staffId = '$staff->staffId'"));
+        return view('staffs.show')->with('staff', $staff)->with('courses', $courses);
+        //return $courses;
     }
 
     /**
@@ -87,14 +89,12 @@ class StaffsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request, [
-            'staffId' => 'required',
+        $this->validate($request, [            
             'fullName' => 'required',
             'email' => 'required',
             'phoneNumber' => 'required'
         ]);
-        $staff = Staff::find($id);
-        $staff->staffId = $request->input('staffId');
+        $staff = Staff::find($id);        
         $staff->fullName = $request->input('fullName');
         $staff->email = $request->input('email');
         $staff->phoneNumber = $request->input('phoneNumber');

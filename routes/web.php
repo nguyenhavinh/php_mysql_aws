@@ -11,7 +11,8 @@
 |
 */
 
-Route::get('/', 'PagesController@staff_index');
+Route::get('/', 'StaffsController@index');
+Route::get('/student/{student}/enroll', 'StudentsController@enroll');
 //Route::get('/staff', 'PagesController@staff_index');
 //Route::get('/course', 'PagesController@course_index');
 //Route::get('/student', 'PagesController@student_index');

@@ -21,7 +21,7 @@
         </tr>
         <tr>
             <th>{{Form::label('staffId', 'Staff ID')}}</th>
-            <th>{{Form::text('staffId', $staff->staffId, ['class' =>'form-control', 'placeholder' => 'Input Staff Id'])}}</th>
+            <th>{{Form::label('staffId', $staff->staffId)}}</th>
         </tr>
         <tr>
             <th>{{Form::label('fullName', 'Full Name')}}</th>

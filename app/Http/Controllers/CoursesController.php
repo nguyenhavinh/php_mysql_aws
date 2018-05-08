@@ -41,7 +41,16 @@ class CoursesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'courseId' => 'required',
+            'courseName' => 'required',            
+        ]);
+        $course = new Course;
+        $course->courseId = $request->input('courseId');
+        $course->courseName = $request->input('courseName');
+        $course->staffId = $request->input('staffId');        
+        $course->save();
+        return redirect('/course')->with('success', 'New Course Created');
     }
 
     /**
@@ -52,7 +61,11 @@ class CoursesController extends Controller
      */
     public function show($id)
     {
-        //
+        $course = Course::find($id);
+        $staff = DB::select(DB::raw("SELECT * FROM Staff WHERE Staff.staffId = '$course->staffId'"));
+        //$courses = Course::find($id);
+        return view('courses.show')->with('course', $course)->with('staff', $staff);
+        //return $staff;
     }
 
     /**
@@ -63,7 +76,9 @@ class CoursesController extends Controller
      */
     public function edit($id)
     {
-        //
+        $course = Course::find($id);
+        $staffs = DB::select('SELECT * FROM Staff');
+        return view('courses.edit')->with('course', $course)->with('staffs', $staffs);
     }
 
     /**
@@ -75,7 +90,14 @@ class CoursesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [             
+            'courseName' => 'required',            
+        ]);
+        $course = Course::find($id);
+        $course->courseName = $request->input('courseName');
+        $course->staffId = $request->input('staffId');        
+        $course->save();
+        return redirect('/course')->with('success', 'Course Updated');
     }
 
     /**
@@ -86,6 +108,8 @@ class CoursesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $course = Course::find($id);
+        $course->delete();
+        return redirect('/course')->with('success', 'Course Deleted');
     }
 }

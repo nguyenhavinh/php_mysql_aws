@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Staff;
+use App\Course;
+use App\Student;
+use DB;
 
 class StudentsController extends Controller
 {
@@ -13,7 +17,9 @@ class StudentsController extends Controller
      */
     public function index()
     {
-        //
+        $students = Student::orderBy('studentId', 'desc')->paginate(10);
+        //$staffs = DB::select('SELECT * FROM Staff');
+        return view('students.index')->with('students', $students);
     }
 
     /**
@@ -23,7 +29,7 @@ class StudentsController extends Controller
      */
     public function create()
     {
-        //
+        return view('students.create');
     }
 
     /**
@@ -34,7 +40,17 @@ class StudentsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'studentId' => 'required',
+            'fullName' => 'required',
+            'email' => 'required',            
+        ]);
+        $student = new Student;
+        $student->studentId = $request->input('studentId');
+        $student->fullName = $request->input('fullName');
+        $student->email = $request->input('email');        
+        $student->save();
+        return redirect('/student')->with('success', 'New Student Created');
     }
 
     /**
@@ -45,7 +61,11 @@ class StudentsController extends Controller
      */
     public function show($id)
     {
-        //
+        $student = Student::find($id);
+        //$courses = Course::find($id);
+        $courses = DB::select(DB::raw("SELECT * FROM Students_Courses WHERE Students_Courses.studentId = '$student->studentId'"));
+        return view('students.show')->with('student', $student)->with('courses', $courses);
+        //return $courses;
     }
 
     /**
@@ -56,7 +76,8 @@ class StudentsController extends Controller
      */
     public function edit($id)
     {
-        //
+        $student = Student::find($id);
+        return view('students.edit')->with('student', $student);
     }
 
     /**
@@ -68,7 +89,15 @@ class StudentsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [            
+            'fullName' => 'required',
+            'email' => 'required',            
+        ]);
+        $student = Student::find($id);        
+        $student->fullName = $request->input('fullName');
+        $student->email = $request->input('email');        
+        $student->save();
+        return redirect('/student')->with('success', 'Student Updated');
     }
 
     /**
@@ -79,6 +108,15 @@ class StudentsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $student = Student::find($id);
+        $student->delete();
+        return redirect('/student')->with('success', 'Student Deleted');
+    }
+    public function enroll($id)
+    {
+        $student = Student::find($id);
+        //$courses = DB::select('SELECT * FROM Courses');
+        $courses = Course::pluck('courseId', 'courseName');
+        return view('students.enroll')->with('student', $student)->with('courses',$courses);
     }
 }
