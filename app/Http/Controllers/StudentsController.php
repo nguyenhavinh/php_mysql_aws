@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Staff;
 use App\Course;
 use App\Student;
+use App\StudentsCourses;
 use DB;
 
 class StudentsController extends Controller
@@ -116,7 +117,20 @@ class StudentsController extends Controller
     {
         $student = Student::find($id);
         //$courses = DB::select('SELECT * FROM Courses');
-        $courses = Course::pluck('courseId', 'courseName');
+        $courses = Course::all();
         return view('students.enroll')->with('student', $student)->with('courses',$courses);
+    }
+    public function saveenroll(Request $request, $id)
+    {
+        $this->validate($request, [
+            'coursesEnroll' => 'required',            
+        ]);
+        $courses = $request->input('coursesEnroll');
+        foreach ($courses as $course)
+            $newEnroll = new StudentsCourses;
+            $newEnroll->studentId = $id;
+            $newEnroll->courseId = $course;
+            $newEnroll->save();
+        return redirect('/student')->with('success', 'New Enrollment Created');        
     }
 }

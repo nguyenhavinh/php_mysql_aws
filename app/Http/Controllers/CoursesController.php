@@ -63,8 +63,9 @@ class CoursesController extends Controller
     {
         $course = Course::find($id);
         $staff = DB::select(DB::raw("SELECT * FROM Staff WHERE Staff.staffId = '$course->staffId'"));
+        $students = DB::select(DB::raw("SELECT DISTINCT students.studentId, students.fullName FROM students INNER JOIN students_courses WHERE (students.studentId=students_courses.studentId) AND (students_courses.courseId='$id')"));
         //$courses = Course::find($id);
-        return view('courses.show')->with('course', $course)->with('staff', $staff);
+        return view('courses.show')->with('course', $course)->with('staff', $staff)->with('students', $students);
         //return $staff;
     }
 

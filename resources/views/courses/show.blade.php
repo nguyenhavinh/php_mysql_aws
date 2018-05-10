@@ -27,7 +27,28 @@
                     <p>NO STAFF FOUND</p>
                 @endif
             </th>
-        </tr>        
+        </tr>
+        <tr>
+            <th>Student Enrolled</th>
+            <th>
+                @if(count($students) > 0)
+                    <h5>There are {{count($students)}} in this courses</h5>
+                    <table class="table">
+                        <tr>
+                            <th>Student ID</th>
+                            <th>Student Name</th>
+                        </tr>
+                    @foreach($students as $student)
+                        <tr>
+                        <th>{{$student->studentId}}</th><th>{{$student->fullName}}</th>
+                        </tr>
+                    @endforeach
+                    </table>
+                @else
+                    <p>NO STAFF FOUND</p>
+                @endif
+            </th>
+        </tr>
         <tr>
             <th>Created At</th>
             <th>{{$course->created_at}}</th>

@@ -10,4 +10,8 @@ class Student extends Model
     public $incrementing = false;
     public $primaryKey = 'studentId';
     public $timestamps = 'true';
+
+    public function studentscourses(){
+        return $this->hasMany('App\StudentsCourses', 'studentId');
+    }
 }
