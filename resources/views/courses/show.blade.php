@@ -32,7 +32,7 @@
             <th>Student Enrolled</th>
             <th>
                 @if(count($students) > 0)
-                    <h5>There are {{count($students)}} in this courses</h5>
+                    <h5>Number of students in this course: {{count($students)}}</h5>
                     <table class="table">
                         <tr>
                             <th>Student ID</th>
